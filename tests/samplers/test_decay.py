@@ -122,7 +122,7 @@ def test_nested_and_derived_context_share(context, monkeypatch):
     assert choices.call_args_list[2].kwargs["weights"] == [1, 0.8, 4]
 
 
-@pytest.mark.parametrize("template", ["{A|B|C}", "{2$$A|B|C}", "{2$$__pose__}"])
+@pytest.mark.parametrize("template", ["{2$$A|B|C}", "{2$$__pose__}"])
 def test_variants_and_multiple_choice_match_random(context, template):
     manager = context.wildcard_manager
     normal = RandomPromptGenerator(manager, seed=45)
@@ -148,7 +148,7 @@ def test_explicit_random_still_uses_original_sampler(context):
     assert decay.generate("__~color__", 20) == normal.generate("__color__", 20)
     assert normal._context.rand.getstate() == decay._context.rand.getstate()
     assert not decay._context.default_sampler._states
-    assert DecayRandomSampler._get_variant is RandomSampler._get_variant
+    assert type(normal._context.default_sampler) is RandomSampler
 
 
 def test_missing_wildcard_and_single_candidate(context):

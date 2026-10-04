@@ -13,9 +13,10 @@ generator = RandomPromptGenerator(
 print(generator.generate("__pose__, __color__", 10))
 ```
 
-Only ordinary single wildcard draws use decay. Variants and multiple-choice
-wildcards keep the inherited random selection logic; no new syntax is added.
-Nested ordinary wildcard evaluations can use decay as usual. Explicit `~`, `!`,
+Ordinary wildcard draws and fixed single-select variants such as
+`{red|blue|green}` use decay, including weighted variants. Multiple-choice and
+ranged variants retain ordinary Random selection; nested commands still use
+the context routing. No new syntax is added. Explicit `~`, `!`,
 and `@` keep their existing meanings. Jinja-specific sampling is unchanged.
 
 A draw uses `original_weight * factor`, then advances all recovering rows one
@@ -40,4 +41,11 @@ Candidates are fetched on each draw. Cache clearing and reloads are observed on
 the next draw; changed row content, weight or order resets that wildcard history.
 Reloading an identical list preserves history. Shuffled order changes can reset
 history, so stable candidate order is recommended for this first version.
+Variant history uses the ordered candidate AST structures and base weights.
+Identical expressions share history across positions and generator calls;
+changed content, order or weights get separate history. Candidate indices keep
+duplicate options distinct. Nested variants have their own structural histories.
+Wildcard and variant histories are separate, including when one contains the other.
+Single literal options require no selection; the existing single-wildcard variant
+conversion continues to use the variant selection path.
 History is not stored in WildcardManager caches and is not process global.
