@@ -22,12 +22,14 @@ if TYPE_CHECKING:
 def _build_default_samplers():
     from dynamicprompts.samplers.combinatorial import CombinatorialSampler
     from dynamicprompts.samplers.cycle import CyclicalSampler
+    from dynamicprompts.samplers.decay import DecayRandomSampler
     from dynamicprompts.samplers.random import RandomSampler
 
     return {
         SamplingMethod.COMBINATORIAL: CombinatorialSampler(),
         SamplingMethod.CYCLICAL: CyclicalSampler(),
         SamplingMethod.RANDOM: RandomSampler(),
+        SamplingMethod.DECAY_RANDOM: DecayRandomSampler(),
     }
 
 

@@ -30,11 +30,13 @@ class RandomPromptGenerator(PromptGenerator):
         unlink_seed_from_prompt: bool = False,
         ignore_whitespace: bool = False,
         parser_config: ParserConfig = default_parser_config,
+        *,
+        default_sampling_method: SamplingMethod = SamplingMethod.RANDOM,
     ) -> None:
         wildcard_manager = wildcard_manager or WildcardManager()
         self._context = SamplingContext(
             wildcard_manager=wildcard_manager,
-            default_sampling_method=SamplingMethod.RANDOM,
+            default_sampling_method=default_sampling_method,
             ignore_whitespace=ignore_whitespace,
             parser_config=parser_config,
             rand=_get_random(
